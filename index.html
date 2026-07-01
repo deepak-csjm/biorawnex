@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BioRawNex — India's Biomass Intelligence Engine</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --forest:   #1a3d1a;
+    --pine:     #2d6a2d;
+    --leaf:     #3d9140;
+    --sprout:   #7ed957;
+    --mist:     #e8f5e2;
+    --bark:     #5c3d1a;
+    --soil:     #8b6340;
+    --straw:    #f5e6c8;
+    --ember:    #c0392b;
+    --sky:      #f7f9f4;
+    --ink:      #111e11;
+    --mid:      #4a6a4a;
+    --pale:     #d4ecc8;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--sky);
+    color: var(--ink);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ─────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(26,61,26,0.97);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; height: 60px;
+    border-bottom: 1px solid rgba(126,217,87,0.2);
+  }
+  .nav-logo {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900; font-size: 22px; color: white; text-decoration: none;
+    letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: var(--sprout); }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a {
+    color: rgba(255,255,255,0.75); text-decoration: none;
+    font-size: 13px; font-weight: 500; letter-spacing: 0.3px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--sprout); }
+  .nav-cta {
+    background: var(--sprout); color: var(--forest) !important;
+    padding: 7px 18px; border-radius: 20px; font-weight: 700 !important;
+  }
+  .nav-cta:hover { background: #9aed6e !important; color: var(--forest) !important; }
+
+  /* ── HERO ─────────────────────────────────────── */
+  #hero {
+    min-height: 100vh;
+    background: linear-gradient(155deg, var(--forest) 0%, #1e4d1e 45%, #255225 70%, #1a3d1a 100%);
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center; padding: 100px 24px 60px;
+    position: relative; overflow: hidden;
+  }
+  #hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 15% 25%, rgba(126,217,87,0.08) 0%, transparent 50%),
+      radial-gradient(circle at 85% 75%, rgba(126,217,87,0.05) 0%, transparent 50%);
+  }
+  /* Animated field lines */
+  .field-lines {
+    position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+  }
+  .field-line {
+    position: absolute; bottom: 0; width: 1px;
+    background: linear-gradient(to top, rgba(126,217,87,0.15), transparent);
+    animation: rise 6s ease-in-out infinite;
+  }
+  @keyframes rise {
+    0%   { transform: translateY(0) scaleY(0); opacity: 0; }
+    20%  { opacity: 1; }
+    80%  { opacity: 0.4; }
+    100% { transform: translateY(-100vh) scaleY(1); opacity: 0; }
+  }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(126,217,87,0.15); border: 1px solid rgba(126,217,87,0.3);
+    color: var(--sprout); border-radius: 20px; padding: 6px 16px;
+    font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+    margin-bottom: 28px; position: relative;
+  }
+  .hero-eyebrow::before { content: '🌾'; }
+
+  h1.hero-title {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(48px, 8vw, 88px);
+    font-weight: 900; color: white; letter-spacing: -3px;
+    line-height: 1; margin-bottom: 16px; position: relative;
+  }
+  h1.hero-title .accent { color: var(--sprout); }
+  h1.hero-title .strike {
+    position: relative; color: rgba(255,255,255,0.35);
+  }
+  h1.hero-title .strike::after {
+    content: ''; position: absolute;
+    left: 0; right: 0; top: 50%; height: 3px;
+    background: var(--ember); border-radius: 2px;
+  }
+
+  .hero-sub {
+    font-size: clamp(16px, 2.5vw, 20px); color: rgba(255,255,255,0.7);
+    max-width: 600px; margin: 0 auto 40px; font-weight: 400; line-height: 1.6;
+    position: relative;
+  }
+  .hero-sub strong { color: var(--sprout); font-weight: 600; }
+
+  .hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
+  .btn-primary {
+    background: var(--sprout); color: var(--forest);
+    padding: 14px 32px; border-radius: 8px; font-weight: 800;
+    font-size: 15px; text-decoration: none; display: inline-flex;
+    align-items: center; gap: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(126,217,87,0.3);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(126,217,87,0.45); }
+  .btn-ghost {
+    background: transparent; color: white;
+    padding: 14px 32px; border-radius: 8px; font-weight: 600;
+    font-size: 15px; text-decoration: none; display: inline-flex;
+    align-items: center; gap: 8px;
+    border: 1px solid rgba(255,255,255,0.3);
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.5); }
+
+  /* Stats bar */
+  .hero-stats {
+    display: flex; justify-content: center; gap: 0;
+    margin-top: 64px; position: relative;
+    border-top: 1px solid rgba(126,217,87,0.2);
+    padding-top: 40px; flex-wrap: wrap;
+  }
+  .stat-item {
+    text-align: center; padding: 0 40px;
+    border-right: 1px solid rgba(126,217,87,0.2);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num { font-size: 36px; font-weight: 900; color: var(--sprout); line-height: 1; }
+  .stat-label { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 6px; max-width: 120px; }
+
+  /* ── POLICY RIBBON ────────────────────────────── */
+  #policy {
+    background: var(--forest);
+    padding: 14px 40px;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    justify-content: center;
+    border-bottom: 2px solid rgba(126,217,87,0.3);
+  }
+  .policy-label {
+    font-size: 11px; font-weight: 700; color: var(--sprout);
+    text-transform: uppercase; letter-spacing: 1.5px; white-space: nowrap;
+  }
+  .policy-tag {
+    background: rgba(126,217,87,0.12); border: 1px solid rgba(126,217,87,0.25);
+    color: rgba(255,255,255,0.85); border-radius: 20px;
+    padding: 4px 14px; font-size: 12px; font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* ── SECTIONS ─────────────────────────────────── */
+  section { padding: 80px 24px; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-eyebrow {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--leaf); margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800; color: var(--forest); line-height: 1.2; margin-bottom: 16px;
+  }
+  .section-desc {
+    font-size: 16px; color: var(--mid); max-width: 560px; line-height: 1.7;
+  }
+
+  /* ── PROBLEM ──────────────────────────────────── */
+  #problem { background: white; }
+  .problem-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px; margin-top: 48px;
+  }
+  .problem-card {
+    border: 1px solid #f5c6c2;
+    border-left: 4px solid var(--ember);
+    border-radius: 10px; padding: 24px;
+    background: #fff9f9;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .problem-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(192,57,43,0.1); }
+  .problem-icon { font-size: 28px; margin-bottom: 14px; }
+  .problem-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--ember); }
+  .problem-card p { font-size: 13px; color: #666; line-height: 1.6; }
+  .problem-stat {
+    display: inline-block; margin-top: 12px;
+    background: var(--ember); color: white;
+    border-radius: 4px; padding: 3px 10px;
+    font-size: 12px; font-weight: 700;
+  }
+
+  /* ── HOW IT WORKS ─────────────────────────────── */
+  #how { background: var(--mist); }
+  .flow-chain {
+    display: flex; align-items: stretch; gap: 0;
+    margin: 48px 0 32px; overflow-x: auto; padding-bottom: 8px;
+  }
+  .flow-node {
+    flex: 1; min-width: 130px;
+    background: white; border: 1px solid var(--pale);
+    border-radius: 12px; padding: 20px 16px; text-align: center;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .flow-node:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(45,106,45,0.12); }
+  .flow-node-icon {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--mist), var(--pale));
+    border: 2px solid var(--pine);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; margin: 0 auto 12px;
+  }
+  .flow-node h4 { font-size: 13px; font-weight: 700; color: var(--forest); margin-bottom: 6px; }
+  .flow-node p { font-size: 11px; color: var(--mid); line-height: 1.5; }
+  .flow-arrow {
+    display: flex; align-items: center;
+    padding: 0 8px; color: var(--sprout);
+    font-size: 24px; font-weight: 800; flex-shrink: 0;
+    padding-bottom: 24px;
+  }
+
+  /* Engine centre */
+  .engine-section {
+    display: grid; grid-template-columns: 1fr 360px 1fr; gap: 32px;
+    align-items: center; margin-top: 56px;
+  }
+  .engine-features { display: flex; flex-direction: column; gap: 16px; }
+  .feature-row {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: white; border-radius: 10px; padding: 16px;
+    border: 1px solid var(--pale);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .feature-row:hover { border-color: var(--pine); box-shadow: 0 4px 16px rgba(45,106,45,0.08); }
+  .feature-icon-wrap {
+    width: 40px; height: 40px; border-radius: 8px;
+    background: var(--mist); display: flex; align-items: center;
+    justify-content: center; font-size: 18px; flex-shrink: 0;
+  }
+  .feature-row h4 { font-size: 13px; font-weight: 700; color: var(--forest); margin-bottom: 4px; }
+  .feature-row p { font-size: 12px; color: var(--mid); line-height: 1.5; }
+
+  .engine-orb {
+    width: 360px; height: 360px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--forest) 0%, var(--pine) 60%, var(--leaf) 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 40px;
+    box-shadow: 0 20px 80px rgba(26,61,26,0.35);
+    border: 4px solid var(--sprout);
+    position: relative; overflow: hidden;
+  }
+  .engine-orb::before {
+    content: ''; position: absolute; inset: -2px;
+    border-radius: 50%;
+    background: conic-gradient(var(--sprout), transparent, var(--sprout));
+    animation: spin 8s linear infinite; z-index: -1;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .engine-orb-emoji { font-size: 48px; margin-bottom: 12px; }
+  .engine-orb h3 {
+    font-family: 'Inter', sans-serif; font-weight: 900;
+    font-size: 22px; color: white; letter-spacing: -0.5px; margin-bottom: 4px;
+  }
+  .engine-orb h3 span { color: var(--sprout); }
+  .engine-orb p { font-size: 12px; color: rgba(255,255,255,0.65); margin-bottom: 16px; }
+  .engine-tags { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+  .engine-tag {
+    background: rgba(126,217,87,0.15); border: 1px solid rgba(126,217,87,0.3);
+    color: var(--sprout); border-radius: 20px;
+    padding: 3px 10px; font-size: 10px; font-weight: 600;
+  }
+
+  /* ── DIFFERENTIATION ──────────────────────────── */
+  #diff { background: var(--forest); }
+  #diff .section-title { color: white; }
+  #diff .section-desc { color: rgba(255,255,255,0.6); }
+  #diff .section-eyebrow { color: var(--sprout); }
+  .diff-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px; margin-top: 48px;
+  }
+  .diff-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(126,217,87,0.15);
+    border-radius: 12px; padding: 28px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .diff-card:hover { background: rgba(126,217,87,0.07); border-color: rgba(126,217,87,0.35); }
+  .diff-card-icon { font-size: 32px; margin-bottom: 16px; }
+  .diff-card h3 { font-size: 16px; font-weight: 700; color: white; margin-bottom: 10px; }
+  .diff-card p { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.7; }
+  .diff-badge {
+    display: inline-block; margin-top: 14px;
+    background: rgba(126,217,87,0.15); border: 1px solid rgba(126,217,87,0.3);
+    color: var(--sprout); border-radius: 4px;
+    padding: 3px 10px; font-size: 11px; font-weight: 600;
+  }
+
+  /* ── IMPACT ───────────────────────────────────── */
+  #impact { background: white; }
+  .impact-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px; margin-top: 48px;
+  }
+  .impact-card {
+    background: var(--mist); border: 1px solid var(--pale);
+    border-radius: 12px; padding: 28px 24px;
+    border-left: 4px solid var(--pine);
+    transition: transform 0.2s;
+  }
+  .impact-card:hover { transform: translateY(-4px); }
+  .impact-num {
+    font-size: 36px; font-weight: 900; color: var(--pine);
+    line-height: 1; margin-bottom: 8px;
+  }
+  .impact-card h3 { font-size: 14px; font-weight: 700; color: var(--forest); margin-bottom: 8px; }
+  .impact-card p { font-size: 12px; color: var(--mid); line-height: 1.6; }
+
+  /* ── WHO WE SERVE ─────────────────────────────── */
+  #serve { background: var(--sky); }
+  .serve-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px; margin-top: 48px;
+  }
+  .serve-card {
+    background: white; border: 1px solid var(--pale);
+    border-radius: 12px; padding: 28px 24px; text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .serve-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--pine), var(--sprout));
+  }
+  .serve-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(45,106,45,0.12); }
+  .serve-card-icon { font-size: 40px; margin-bottom: 14px; }
+  .serve-card h3 { font-size: 16px; font-weight: 700; color: var(--forest); margin-bottom: 10px; }
+  .serve-card ul { list-style: none; text-align: left; }
+  .serve-card ul li {
+    font-size: 12px; color: var(--mid); padding: 4px 0;
+    padding-left: 18px; position: relative; line-height: 1.5;
+  }
+  .serve-card ul li::before {
+    content: '✓'; position: absolute; left: 0;
+    color: var(--pine); font-weight: 700; font-size: 11px;
+  }
+
+  /* ── GEOGRAPHY ────────────────────────────────── */
+  #geography { background: var(--straw); }
+  .geo-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 40px; align-items: center; margin-top: 48px;
+  }
+  .geo-states { display: flex; flex-direction: column; gap: 12px; }
+  .geo-state {
+    display: flex; align-items: center; gap: 16px;
+    background: white; border-radius: 10px; padding: 16px 20px;
+    border: 1px solid rgba(92,61,26,0.15);
+  }
+  .geo-state-icon { font-size: 28px; }
+  .geo-state-name { font-weight: 700; font-size: 15px; color: var(--bark); }
+  .geo-state-desc { font-size: 12px; color: #888; margin-top: 2px; }
+  .geo-state-badge {
+    margin-left: auto; background: var(--bark); color: white;
+    border-radius: 4px; padding: 3px 10px; font-size: 11px; font-weight: 600;
+    white-space: nowrap;
+  }
+  .geo-info { display: flex; flex-direction: column; gap: 20px; }
+  .geo-info-card {
+    background: var(--bark); color: white;
+    border-radius: 12px; padding: 24px;
+  }
+  .geo-info-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 10px; color: var(--straw); }
+  .geo-info-card p { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.7; }
+  .geo-timeline { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+  .geo-phase {
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .geo-phase-dot {
+    width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; margin-top: 2px;
+  }
+  .phase-1 { background: var(--sprout); color: var(--forest); }
+  .phase-2 { background: rgba(126,217,87,0.3); color: var(--sprout); }
+  .phase-3 { background: rgba(126,217,87,0.15); color: rgba(126,217,87,0.6); }
+  .geo-phase-text h4 { font-size: 13px; font-weight: 700; color: white; }
+  .geo-phase-text p { font-size: 12px; color: rgba(255,255,255,0.55); }
+
+  /* ── TECH STACK ───────────────────────────────── */
+  #tech { background: white; }
+  .tech-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px; margin-top: 48px;
+  }
+  .tech-card {
+    background: var(--sky); border: 1px solid var(--pale);
+    border-radius: 10px; padding: 20px 16px; text-align: center;
+    transition: transform 0.2s;
+  }
+  .tech-card:hover { transform: translateY(-3px); }
+  .tech-card-icon { font-size: 32px; margin-bottom: 10px; }
+  .tech-card h4 { font-size: 13px; font-weight: 700; color: var(--forest); margin-bottom: 4px; }
+  .tech-card p { font-size: 11px; color: var(--mid); line-height: 1.5; }
+
+  /* ── CTA ──────────────────────────────────────── */
+  #cta {
+    background: linear-gradient(135deg, var(--forest) 0%, #255225 100%);
+    text-align: center; padding: 100px 24px;
+    position: relative; overflow: hidden;
+  }
+  #cta::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(126,217,87,0.1) 0%, transparent 70%);
+  }
+  #cta h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 52px); font-weight: 800;
+    color: white; margin-bottom: 16px; position: relative;
+  }
+  #cta h2 span { color: var(--sprout); }
+  #cta p {
+    font-size: 17px; color: rgba(255,255,255,0.65);
+    max-width: 520px; margin: 0 auto 40px; position: relative;
+  }
+  .cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
+
+  /* Contact form */
+  .contact-form {
+    max-width: 480px; margin: 48px auto 0;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(126,217,87,0.2);
+    border-radius: 16px; padding: 32px;
+    position: relative;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+  .form-field label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.6); letter-spacing: 0.5px; }
+  .form-field input, .form-field select, .form-field textarea {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(126,217,87,0.2);
+    border-radius: 8px; padding: 10px 14px;
+    color: white; font-size: 14px; font-family: 'Inter', sans-serif;
+    outline: none; transition: border-color 0.2s;
+  }
+  .form-field input::placeholder, .form-field textarea::placeholder { color: rgba(255,255,255,0.3); }
+  .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+    border-color: var(--sprout);
+  }
+  .form-field select option { background: var(--forest); color: white; }
+  .form-field textarea { resize: vertical; min-height: 80px; }
+  .btn-submit {
+    width: 100%; background: var(--sprout); color: var(--forest);
+    border: none; border-radius: 8px; padding: 14px;
+    font-size: 15px; font-weight: 800; cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn-submit:hover { background: #9aed6e; transform: translateY(-1px); }
+  .form-note { font-size: 11px; color: rgba(255,255,255,0.4); text-align: center; margin-top: 12px; }
+
+  /* ── FOOTER ───────────────────────────────────── */
+  footer {
+    background: var(--ink); color: rgba(255,255,255,0.5);
+    padding: 40px 40px 24px;
+  }
+  .footer-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 40px; flex-wrap: wrap; padding-bottom: 32px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 24px;
+  }
+  .footer-brand h3 {
+    font-size: 22px; font-weight: 900; color: white; margin-bottom: 8px;
+  }
+  .footer-brand h3 span { color: var(--sprout); }
+  .footer-brand p { font-size: 13px; line-height: 1.6; max-width: 280px; }
+  .footer-links h4 { font-size: 12px; font-weight: 700; color: white; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+  .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .footer-links ul a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+  .footer-links ul a:hover { color: var(--sprout); }
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+  }
+  .footer-bottom p { font-size: 12px; }
+  .footer-bottom p a { color: var(--sprout); text-decoration: none; }
+  .footer-geo { display: flex; gap: 8px; flex-wrap: wrap; }
+  .geo-pill {
+    background: rgba(126,217,87,0.1); border: 1px solid rgba(126,217,87,0.2);
+    color: var(--sprout); border-radius: 20px;
+    padding: 3px 10px; font-size: 11px; font-weight: 500;
+  }
+
+  /* ── SCROLL ANIMATIONS ────────────────────────── */
+  .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── MOBILE ───────────────────────────────────── */
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    #hero { padding: 80px 20px 48px; }
+    .stat-item { padding: 0 20px; }
+    .engine-section { grid-template-columns: 1fr; }
+    .engine-orb { width: 280px; height: 280px; margin: 0 auto; }
+    .geo-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .footer-top { flex-direction: column; }
+    section { padding: 56px 20px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .field-line, .engine-orb::before { animation: none; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">BioRaw<span>Nex</span></a>
+  <ul class="nav-links">
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#diff">Why Us</a></li>
+    <li><a href="#serve">Who We Serve</a></li>
+    <li><a href="#geography">Geography</a></li>
+    <li><a href="#cta" class="nav-cta">Join the Platform</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="field-lines">
+    <div class="field-line" style="left:8%;height:40%;animation-delay:0s;animation-duration:7s;"></div>
+    <div class="field-line" style="left:22%;height:60%;animation-delay:1.5s;animation-duration:9s;"></div>
+    <div class="field-line" style="left:38%;height:35%;animation-delay:0.8s;animation-duration:6s;"></div>
+    <div class="field-line" style="left:55%;height:50%;animation-delay:2.2s;animation-duration:8s;"></div>
+    <div class="field-line" style="left:70%;height:45%;animation-delay:0.4s;animation-duration:7.5s;"></div>
+    <div class="field-line" style="left:85%;height:55%;animation-delay:1.8s;animation-duration:8.5s;"></div>
+  </div>
+
+  <div class="hero-eyebrow">India's Biomass Intelligence Engine</div>
+
+  <h1 class="hero-title">
+    Stop <span class="strike">burning</span><br>
+    start <span class="accent">earning.</span>
+  </h1>
+
+  <p class="hero-sub">
+    BioRawNex connects <strong>farmers, aggregators, transporters</strong> and <strong>industries</strong>
+    into one intelligent supply chain — turning crop residue into reliable renewable fuel.
+  </p>
+
+  <div class="hero-ctas">
+    <a href="#cta" class="btn-primary">🌾 Join as Farmer / Aggregator</a>
+    <a href="#how" class="btn-ghost">See How It Works →</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">500M+</div>
+      <div class="stat-label">tonnes of crop residue burned every year</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">₹2,400 Cr</div>
+      <div class="stat-label">lost to logistics inefficiency annually</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">4 States</div>
+      <div class="stat-label">UP · Punjab · Haryana · MP — Phase 1</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">2030</div>
+      <div class="stat-label">India's national biomass energy target year</div>
+    </div>
+  </div>
+</section>
+
+<!-- POLICY RIBBON -->
+<div id="policy">
+  <span class="policy-label">🏛️ Policy Tailwind</span>
+  <span class="policy-tag">MNRE Biomass Programme</span>
+  <span class="policy-tag">PM-KUSUM Scheme</span>
+  <span class="policy-tag">CBG / SATAT Mandate</span>
+  <span class="policy-tag">Anti-Stubble Burning Laws</span>
+  <span class="policy-tag">National Bioenergy Programme 2026</span>
+</div>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-eyebrow">The Problem</div>
+      <h2 class="section-title">India's biomass supply chain<br>is completely broken.</h2>
+      <p class="section-desc">Farmers burn what industries desperately need. There is no organised system connecting them — until now.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card reveal">
+        <div class="problem-icon">🔥</div>
+        <h3>Farmers Burn Residue</h3>
+        <p>Paddy straw, wheat stubble and sugarcane trash are burned in open fields — polluting air and wasting income-generating biomass.</p>
+        <span class="problem-stat">500M+ tonnes/yr wasted</span>
+      </div>
+      <div class="problem-card reveal">
+        <div class="problem-icon">📦</div>
+        <h3>Fragmented, Unorganised Supply</h3>
+        <p>No standardisation, no traceability, no quality grading. Aggregators operate in silos with no market visibility or price discovery.</p>
+        <span class="problem-stat">Zero standardisation</span>
+      </div>
+      <div class="problem-card reveal">
+        <div class="problem-icon">🚛</div>
+        <h3>Broken Logistics</h3>
+        <p>Poor routing, empty trucks, no load optimisation. Transport costs eat 30–40% of biomass value before it reaches the plant gate.</p>
+        <span class="problem-stat">₹2,400 Cr lost/yr</span>
+      </div>
+      <div class="problem-card reveal">
+        <div class="problem-icon">🏭</div>
+        <h3>Industries Pay More, Get Less</h3>
+        <p>Cement, power and paper plants face irregular supply, quality variation and no long-term sourcing reliability — raising energy costs.</p>
+        <span class="problem-stat">Irregular supply = high cost</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-eyebrow">How It Works</div>
+      <h2 class="section-title">One intelligent platform.<br>End-to-end biomass flow.</h2>
+      <p class="section-desc">BioRawNex digitises every step from farm residue collection to industrial delivery — with AI at the centre.</p>
+    </div>
+
+    <!-- Flow chain -->
+    <div class="flow-chain">
+      <div class="flow-node reveal">
+        <div class="flow-node-icon">🌾</div>
+        <h4>Farmers</h4>
+        <p>Register via WhatsApp or Hindi voice. List available crop residue.</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node reveal">
+        <div class="flow-node-icon">🏘️</div>
+        <h4>Aggregators</h4>
+        <p>Collect, grade & store biomass. Get matched to nearest demand.</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node reveal">
+        <div class="flow-node-icon">🚛</div>
+        <h4>Transporters</h4>
+        <p>Optimised routes, full loads, real-time GPS tracking to plant.</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node reveal">
+        <div class="flow-node-icon">⚙️</div>
+        <h4>Pellet Plants</h4>
+        <p>Receive consistent, graded, quality-certified biomass at the gate.</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node reveal">
+        <div class="flow-node-icon">🏗️</div>
+        <h4>Industries</h4>
+        <p>Cement, power, paper & steel get uninterrupted fuel supply.</p>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node reveal">
+        <div class="flow-node-icon">🌍</div>
+        <h4>Clean Energy</h4>
+        <p>Reduced stubble burning. Carbon credits. ESG compliance.</p>
+      </div>
+    </div>
+
+    <!-- Engine + Features -->
+    <div class="engine-section">
+      <div class="engine-features">
+        <div class="feature-row reveal">
+          <div class="feature-icon-wrap">🧠</div>
+          <div>
+            <h4>Supply Intelligence</h4>
+            <p>AI demand forecasting integrated with mandi price data. Know what's needed, where, and when — before the season starts.</p>
+          </div>
+        </div>
+        <div class="feature-row reveal">
+          <div class="feature-icon-wrap">✅</div>
+          <div>
+            <h4>Digital Quality Grading</h4>
+            <p>Farm-gate quality checks and standardised grading generate digital certificates that travel with every consignment.</p>
+          </div>
+        </div>
+        <div class="feature-row reveal">
+          <div class="feature-icon-wrap">💳</div>
+          <div>
+            <h4>Transparent Payments</h4>
+            <p>Digital contracts, UPI-based farmer payments within 24 hours of delivery. No middleman leakage.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:center;">
+        <div class="engine-orb reveal">
+          <div class="engine-orb-emoji">🧬</div>
+          <h3>BioRaw<span>Nex</span></h3>
+          <p>Intelligence Engine</p>
+          <div class="engine-tags">
+            <span class="engine-tag">AI / ML</span>
+            <span class="engine-tag">IoT</span>
+            <span class="engine-tag">WhatsApp API</span>
+            <span class="engine-tag">Hindi Voice</span>
+            <span class="engine-tag">Cloud</span>
+            <span class="engine-tag">GPS</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="engine-features">
+        <div class="feature-row reveal">
+          <div class="feature-icon-wrap">🚛</div>
+          <div>
+            <h4>Logistics Optimisation</h4>
+            <p>Route planning, load consolidation and real-time vehicle tracking. Cut empty runs and lower cost per tonne by 30–40%.</p>
+          </div>
+        </div>
+        <div class="feature-row reveal">
+          <div class="feature-icon-wrap">🤝</div>
+          <div>
+            <h4>Smart Buyer–Seller Matching</h4>
+            <p>Real-time matching of supply clusters to industrial demand — by biomass type, quantity, quality grade and distance.</p>
+          </div>
+        </div>
+        <div class="feature-row reveal">
+          <div class="feature-icon-wrap">🌱</div>
+          <div>
+            <h4>ESG & Carbon Reporting</h4>
+            <p>Automated carbon savings tracking. Ready for carbon credit certification. ESG dashboards for industrial buyers.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIFFERENTIATION -->
+<section id="diff">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-eyebrow">Why BioRawNex</div>
+      <h2 class="section-title">Not another marketplace.<br>An intelligence layer.</h2>
+      <p class="section-desc">Competitors list buyers and sellers. We organise the entire supply chain — from stubble to stack — with AI, voice and vernacular.</p>
+    </div>
+    <div class="diff-grid">
+      <div class="diff-card reveal">
+        <div class="diff-card-icon">🗣️</div>
+        <h3>Hindi Voice Onboarding</h3>
+        <p>Farmers in Saharanpur, Muzaffarnagar and Ambala don't need to type. They speak. Our Sarvam AI-powered voice interface works in Hindi and local dialects — zero literacy barrier.</p>
+        <span class="diff-badge">Sarvam AI · Hindi STT/TTS</span>
+      </div>
+      <div class="diff-card reveal">
+        <div class="diff-card-icon">📱</div>
+        <h3>WhatsApp-First Interface</h3>
+        <p>No app download required. Farmers register, get price alerts, confirm pickups and receive payments entirely via WhatsApp — the one app already on every phone in rural India.</p>
+        <span class="diff-badge">Interakt · WhatsApp Business API</span>
+      </div>
+      <div class="diff-card reveal">
+        <div class="diff-card-icon">📊</div>
+        <h3>Real-Time Mandi Price Integration</h3>
+        <p>Biomass prices linked live to agri-commodity mandi data. Farmers see fair market rates. Industries get price transparency. No information asymmetry.</p>
+        <span class="diff-badge">Live Price Discovery</span>
+      </div>
+      <div class="diff-card reveal">
+        <div class="diff-card-icon">🏆</div>
+        <h3>Digital Quality at Farm Gate</h3>
+        <p>Quality grading happens at collection — not at the plant gate. IoT-enabled moisture and calorific value checks generate tamper-proof digital certificates.</p>
+        <span class="diff-badge">IoT · Blockchain-ready</span>
+      </div>
+      <div class="diff-card reveal">
+        <div class="diff-card-icon">🌿</div>
+        <h3>Built for MNRE & CBG Compliance</h3>
+        <p>Our platform generates the documentation, traceability logs and sustainability reports required for MNRE grants, CBG blending mandates and ESG audits.</p>
+        <span class="diff-badge">MNRE · CBG · SATAT aligned</span>
+      </div>
+      <div class="diff-card reveal">
+        <div class="diff-card-icon">🤖</div>
+        <h3>AI Demand Forecasting</h3>
+        <p>Seasonal crop calendars, historical offtake data and industrial capacity signals combine to predict biomass demand 90 days ahead — reducing uncertainty for all stakeholders.</p>
+        <span class="diff-badge">Seasonal AI Forecasting</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section id="impact">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-eyebrow">The Impact</div>
+      <h2 class="section-title">Win for every stakeholder<br>in the chain.</h2>
+      <p class="section-desc">When the supply chain is organised, every participant earns more, spends less and contributes to a greener India.</p>
+    </div>
+    <div class="impact-grid">
+      <div class="impact-card reveal">
+        <div class="impact-num">3×</div>
+        <h3>Higher Farmer Income</h3>
+        <p>Assured demand, fair prices and same-day digital payments — versus burning residue for free.</p>
+      </div>
+      <div class="impact-card reveal">
+        <div class="impact-num">40%</div>
+        <h3>Lower Logistics Cost</h3>
+        <p>AI-optimised routing and load consolidation cuts per-tonne transport cost significantly.</p>
+      </div>
+      <div class="impact-card reveal">
+        <div class="impact-num">100%</div>
+        <h3>Supply Traceability</h3>
+        <p>Every tonne of biomass is digitally traceable from farm to factory gate.</p>
+      </div>
+      <div class="impact-card reveal">
+        <div class="impact-num">Zero</div>
+        <h3>Stubble Burning</h3>
+        <p>When residue has a buyer and a price, farmers stop burning. Cleaner air. Lower GHG.</p>
+      </div>
+      <div class="impact-card reveal">
+        <div class="impact-num">ESG</div>
+        <h3>Carbon Credit Ready</h3>
+        <p>Automated carbon savings reports enable industries to pursue ESG goals and carbon credits.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO WE SERVE -->
+<section id="serve">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-eyebrow">Who We Serve</div>
+      <h2 class="section-title">Four stakeholders.<br>One platform.</h2>
+      <p class="section-desc">BioRawNex is built for every participant in the biomass value chain — with interfaces and tools tailored to each.</p>
+    </div>
+    <div class="serve-grid">
+      <div class="serve-card reveal">
+        <div class="serve-card-icon">🌾</div>
+        <h3>Farmers</h3>
+        <ul>
+          <li>Register via WhatsApp or Hindi voice call</li>
+          <li>Get instant biomass price alerts</li>
+          <li>Confirm pickups with one tap</li>
+          <li>Receive UPI payments within 24 hours</li>
+          <li>No app download or literacy needed</li>
+        </ul>
+      </div>
+      <div class="serve-card reveal">
+        <div class="serve-card-icon">🏘️</div>
+        <h3>Aggregators</h3>
+        <ul>
+          <li>AI-matched to nearest active demand</li>
+          <li>Digital quality grading tools</li>
+          <li>Route-optimised pickup scheduling</li>
+          <li>Inventory & storage dashboards</li>
+          <li>Digital contracts, no paperwork</li>
+        </ul>
+      </div>
+      <div class="serve-card reveal">
+        <div class="serve-card-icon">🚛</div>
+        <h3>Transporters</h3>
+        <ul>
+          <li>Load consolidation — no empty runs</li>
+          <li>GPS-tracked trip management</li>
+          <li>Optimised route suggestions</li>
+          <li>Digital lorry receipts & e-way bills</li>
+          <li>Faster, guaranteed payments</li>
+        </ul>
+      </div>
+      <div class="serve-card reveal">
+        <div class="serve-card-icon">🏭</div>
+        <h3>Industries</h3>
+        <ul>
+          <li>Cement, power, paper & steel plants</li>
+          <li>Reliable, quality-certified biomass supply</li>
+          <li>Long-term supply contracts</li>
+          <li>ESG & carbon savings dashboard</li>
+          <li>MNRE compliance documentation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GEOGRAPHY -->
+<section id="geography">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-eyebrow">Geography</div>
+      <h2 class="section-title" style="color:var(--bark);">Starting where residue<br>burning is worst.</h2>
+      <p class="section-desc" style="color:#7a5a3a;">We launch in the four states responsible for 70% of India's crop residue burning — and expand from there.</p>
+    </div>
+    <div class="geo-grid">
+      <div class="geo-states">
+        <div class="geo-state reveal">
+          <div class="geo-state-icon">🌾</div>
+          <div>
+            <div class="geo-state-name">Uttar Pradesh</div>
+            <div class="geo-state-desc">Saharanpur, Muzaffarnagar, Meerut — paddy straw & sugarcane trash</div>
+          </div>
+          <span class="geo-state-badge">Phase 1 · Launch</span>
+        </div>
+        <div class="geo-state reveal">
+          <div class="geo-state-icon">🌾</div>
+          <div>
+            <div class="geo-state-name">Punjab</div>
+            <div class="geo-state-desc">Ludhiana, Amritsar belt — paddy straw, highest stubble burning</div>
+          </div>
+          <span class="geo-state-badge">Phase 1</span>
+        </div>
+        <div class="geo-state reveal">
+          <div class="geo-state-icon">🌾</div>
+          <div>
+            <div class="geo-state-name">Haryana</div>
+            <div class="geo-state-desc">Karnal, Kurukshetra — wheat straw & paddy residue</div>
+          </div>
+          <span class="geo-state-badge">Phase 1</span>
+        </div>
+        <div class="geo-state reveal">
+          <div class="geo-state-icon">🌿</div>
+          <div>
+            <div class="geo-state-name">Madhya Pradesh</div>
+            <div class="geo-state-desc">Soybean, cotton stalks & forest biomass aggregation</div>
+          </div>
+          <span class="geo-state-badge">Phase 2</span>
+        </div>
+      </div>
+      <div class="geo-info">
+        <div class="geo-info-card reveal">
+          <h3>🗺️ Rollout Roadmap</h3>
+          <div class="geo-timeline">
+            <div class="geo-phase">
+              <div class="geo-phase-dot phase-1">1</div>
+              <div class="geo-phase-text">
+                <h4>2025–26 · UP & Punjab Pilot</h4>
+                <p>50 aggregator nodes. 5,000 farmer onboarding. 3 industrial offtake partners.</p>
+              </div>
+            </div>
+            <div class="geo-phase">
+              <div class="geo-phase-dot phase-2">2</div>
+              <div class="geo-phase-text">
+                <h4>2026–27 · Haryana + MP Expansion</h4>
+                <p>200 nodes. Full logistics optimisation layer. Pellet plant integrations.</p>
+              </div>
+            </div>
+            <div class="geo-phase">
+              <div class="geo-phase-dot phase-3">3</div>
+              <div class="geo-phase-text">
+                <h4>2027–28 · Pan-India Scale</h4>
+                <p>10 states. Carbon credit platform launch. B2B SaaS for large industries.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="geo-info-card reveal" style="background:var(--pine);">
+          <h3>📋 Biomass Types Covered</h3>
+          <p>Paddy straw · Wheat straw · Sugarcane trash · Soybean stalk · Cotton stalks · Maize husk · Mustard straw · Wood chips · Bamboo · Forest residue</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section id="tech">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-eyebrow">Technology</div>
+      <h2 class="section-title">Built for India.<br>Built to scale.</h2>
+      <p class="section-desc">Every technology choice is made for the realities of rural India — low connectivity, vernacular users, and high transaction volume.</p>
+    </div>
+    <div class="tech-grid">
+      <div class="tech-card reveal">
+        <div class="tech-card-icon">🗣️</div>
+        <h4>Sarvam AI</h4>
+        <p>Hindi & regional language voice STT/TTS for farmer onboarding</p>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-card-icon">💬</div>
+        <h4>WhatsApp API</h4>
+        <p>Interakt-powered farmer interface — no app, no friction</p>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-card-icon">🧠</div>
+        <h4>AI / ML Engine</h4>
+        <p>Demand forecasting, smart matching and route optimisation</p>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-card-icon">📡</div>
+        <h4>IoT Sensors</h4>
+        <p>Farm-gate moisture and quality measurement devices</p>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-card-icon">📍</div>
+        <h4>GPS Tracking</h4>
+        <p>Real-time vehicle and consignment tracking end-to-end</p>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-card-icon">☁️</div>
+        <h4>Cloud Platform</h4>
+        <p>Scalable, secure infrastructure for pan-India operations</p>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-card-icon">💳</div>
+        <h4>UPI Payments</h4>
+        <p>Instant, direct farmer payments via MSG91 & UPI rails</p>
+      </div>
+      <div class="tech-card reveal">
+        <div class="tech-card-icon">📊</div>
+        <h4>ESG Dashboard</h4>
+        <p>Carbon savings tracking, MNRE reporting & credit readiness</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="container">
+    <h2 class="reveal">Residue is not waste.<br>It's <span>tomorrow's energy.</span></h2>
+    <p class="reveal">Whether you're a farmer with stubble to sell, an aggregator building a network, or an industry seeking reliable biomass supply — BioRawNex is your platform.</p>
+    <div class="cta-buttons reveal">
+      <a href="#contact-form" class="btn-primary">🌾 Register Your Interest</a>
+      <a href="#how" class="btn-ghost">📄 Learn How It Works</a>
+    </div>
+
+    <div class="contact-form reveal" id="contact-form">
+      <div style="font-size:15px;font-weight:700;color:white;margin-bottom:20px;text-align:center;">
+        Join the BioRawNex Network
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Your Name</label>
+          <input type="text" placeholder="Rajesh Kumar"/>
+        </div>
+        <div class="form-field">
+          <label>Mobile Number</label>
+          <input type="tel" placeholder="+91 98765 43210"/>
+        </div>
+      </div>
+      <div class="form-field">
+        <label>I am a</label>
+        <select>
+          <option value="">Select your role</option>
+          <option>Farmer</option>
+          <option>Aggregator / Collector</option>
+          <option>Transporter</option>
+          <option>Pellet Plant / Processor</option>
+          <option>Industry Buyer (Cement / Power / Paper)</option>
+          <option>Investor / Partner</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>State</label>
+          <select>
+            <option value="">Select State</option>
+            <option>Uttar Pradesh</option>
+            <option>Punjab</option>
+            <option>Haryana</option>
+            <option>Madhya Pradesh</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>District / City</label>
+          <input type="text" placeholder="Saharanpur"/>
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Tell us about your biomass (optional)</label>
+        <textarea placeholder="E.g. I have 50 tonnes of paddy straw available in November from Muzaffarnagar..."></textarea>
+      </div>
+      <button class="btn-submit" onclick="handleSubmit(this)">🌾 Register My Interest</button>
+      <p class="form-note">A BioRawNex team member will contact you within 48 hours via WhatsApp or call.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <h3>BioRaw<span>Nex</span></h3>
+      <p>India's Biomass Intelligence Engine — connecting farmers, aggregators, transporters and industries into one organised supply chain.</p>
+      <div class="footer-geo" style="margin-top:16px;">
+        <span class="geo-pill">UP</span>
+        <span class="geo-pill">Punjab</span>
+        <span class="geo-pill">Haryana</span>
+        <span class="geo-pill">MP</span>
+      </div>
+    </div>
+    <div class="footer-links">
+      <h4>Platform</h4>
+      <ul>
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#serve">Who We Serve</a></li>
+        <li><a href="#diff">Why BioRawNex</a></li>
+        <li><a href="#geography">Geography</a></li>
+        <li><a href="#tech">Technology</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Join Us</h4>
+      <ul>
+        <li><a href="#cta">Register as Farmer</a></li>
+        <li><a href="#cta">Register as Aggregator</a></li>
+        <li><a href="#cta">Industrial Sourcing</a></li>
+        <li><a href="#cta">Investor Enquiry</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Dhyanity Private Limited</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Use</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 BioRawNex · A product of <a href="#">Dhyanity Private Limited</a> · Raw. Reliable. Renewable.</p>
+    <p>Made with 🌱 for rural India</p>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 60);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Form submit handler
+  function handleSubmit(btn) {
+    btn.textContent = '✅ Interest Registered!';
+    btn.style.background = '#2d6a2d';
+    btn.style.color = 'white';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = '🌾 Register My Interest';
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.disabled = false;
+    }, 3000);
+  }
+
+  // Active nav link highlight
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 80) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === `#${current}`
+        ? 'var(--sprout)' : '';
+    });
+  });
+</script>
+</body>
+</html>
