@@ -547,6 +547,78 @@
     .field-line, .engine-orb::before { animation: none; }
     .reveal { opacity: 1; transform: none; }
   }
+
+/* ===== BRN PREMIUM REBRAND OVERRIDES ===== */
+:root{
+  --forest:#111827;
+  --pine:#1F2937;
+  --leaf:#8B5A2B;
+  --sprout:#D9A441;
+  --mist:#F7F5F2;
+  --bark:#8B5A2B;
+  --soil:#B08968;
+  --straw:#F8F5EE;
+  --sky:#F7F5F2;
+  --ink:#111827;
+  --mid:#6B7280;
+  --pale:#ECE8E1;
+}
+nav{background:rgba(17,24,39,.92)!important;border-bottom:1px solid rgba(217,164,65,.15)!important;backdrop-filter:blur(20px);}
+#hero,#cta,#diff{background:linear-gradient(135deg,#111827,#1F2937)!important;}
+.hero-eyebrow{background:rgba(217,164,65,.08)!important;border:1px solid rgba(217,164,65,.25)!important;color:#D9A441!important;}
+.nav-logo span,.section-eyebrow,.stat-num,.geo-pill,.engine-tag,.diff-badge{color:#D9A441!important;}
+.btn-primary,.btn-submit,.nav-cta{
+background:linear-gradient(90deg,#8B5A2B,#D9A441)!important;
+color:#fff!important;
+border-radius:16px!important;
+}
+.btn-ghost{
+background:rgba(255,255,255,.05)!important;
+border:1px solid rgba(255,255,255,.15)!important;
+}
+h1.hero-title .accent{color:#D9A441!important;}
+h1.hero-title .strike::after{background:#8B5A2B!important;}
+.stat-item{
+background:rgba(255,255,255,.05);
+border:1px solid rgba(217,164,65,.12);
+border-radius:22px;
+margin:10px;
+padding:22px;
+}
+#policy{background:#1F2937!important;}
+.policy-tag{
+background:rgba(217,164,65,.08)!important;
+border:1px solid rgba(217,164,65,.2)!important;
+color:#D9A441!important;
+}
+.problem-card,.flow-node,.feature-row,.serve-card,.tech-card,.contact-form{
+border-radius:22px!important;
+box-shadow:0 10px 30px rgba(0,0,0,.05)!important;
+}
+.problem-card{border-left:4px solid #8B5A2B!important;}
+#how{background:#F8F5EE!important;}
+.engine-orb{
+background:linear-gradient(135deg,#111827,#1F2937)!important;
+border:4px solid #D9A441!important;
+box-shadow:0 20px 60px rgba(17,24,39,.35)!important;
+}
+.engine-orb h3{font-size:34px!important;}
+footer{background:#0B1120!important;}
+.voice-btn{
+position:fixed;
+right:24px;
+bottom:24px;
+width:64px;
+height:64px;
+border:none;
+border-radius:50%;
+background:linear-gradient(90deg,#8B5A2B,#D9A441);
+color:white;
+font-size:28px;
+box-shadow:0 20px 40px rgba(139,90,43,.35);
+z-index:1000;
+}
+
 </style>
 </head>
 <body>
@@ -1203,5 +1275,6 @@
     });
   });
 </script>
+<button class="voice-btn" title="Speak in Hindi">🎤</button>
 </body>
 </html>
