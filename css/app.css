@@ -1,1 +1,47 @@
-
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:system-ui,sans-serif;
+}
+.app-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px;
+}
+.brand{
+  font-weight:700;
+  color:var(--secondary);
+}
+#app{
+  padding:20px;
+  min-height:70vh;
+}
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  display:flex;
+  justify-content:space-around;
+  padding:12px;
+  background:#fff;
+}
+.bottom-nav button{
+  border:none;
+  background:none;
+  display:flex;
+  flex-direction:column;
+}
+.card{
+  background:#fff;
+  border-radius:var(--radius);
+  padding:20px;
+}
+.primary-btn{
+  background:var(--primary);
+  border:none;
+  padding:14px 20px;
+  border-radius:16px;
+}
